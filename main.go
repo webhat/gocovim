@@ -20,6 +20,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"strings"
@@ -27,7 +28,13 @@ import (
 
 var files map[string]map[int]*Status = make(map[string]map[int]*Status)
 
+func verbose() {
+	log.SetFlags(0)
+	log.SetOutput(ioutil.Discard)
+}
+
 func main() {
+	verbose()
 	var filename string
 	if len(os.Args) < 2 {
 		filename = "cover.out"
