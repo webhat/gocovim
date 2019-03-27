@@ -1,0 +1,4 @@
+*gocovim* At a certain point it will be handy to populate this file, until then please refer to the READMe.md hat comes with the project.
+
+Author: Daniël W. Crompton
+License: GNU General Public License v3.0

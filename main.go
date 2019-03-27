@@ -79,10 +79,12 @@ type Status struct {
 }
 
 func addToCoverageMap(cover Cover) error {
+	filename := strings.Split(cover.filename, "/")
+	cover.filename = filename[len(filename)-1]
+
 	if files[cover.filename] == nil {
 		files[cover.filename] = make(map[int]*Status)
 	}
-	filename := strings.Split(cover.filename, "/")
 	for i := cover.lineFrom; i <= cover.lineTo; i++ {
 		files[cover.filename][i] = &Status{}
 		files[cover.filename][i].filename = filename[len(filename)-1]
@@ -122,13 +124,6 @@ func createCoverageFile() {
 	}
 }
 
-type Cover struct {
-	filename                  string
-	lineFrom, lineTo          int
-	columnFrom, columnTo      int
-	numberOfStatements, count int
-}
-
 func parseCoverLine(line string) (item Cover, err error) {
 	item = Cover{}
 	log.Println(line)
@@ -138,6 +133,13 @@ func parseCoverLine(line string) (item Cover, err error) {
 	log.Printf(" Count: %d\n", cnt)
 	log.Println(item)
 	return
+}
+
+type Cover struct {
+	filename                  string
+	lineFrom, lineTo          int
+	columnFrom, columnTo      int
+	numberOfStatements, count int
 }
 
 /*
