@@ -100,15 +100,22 @@ func addToCoverageMap(cover Cover) error {
 }
 
 func createCoverageFile() {
-	fmt.Println(":hi  HitSign     ctermfg=6      cterm=bold   gui=bold    guifg=Green")
-	fmt.Println(":hi  MissSign    ctermfg=Red    cterm=bold   gui=bold    guifg=Red")
-	fmt.Println(":hi  IgnoredSign ctermfg=6      cterm=bold   gui=bold    guifg=Grey")
-	fmt.Println(":sign  define  hit      linehl=HitLine      texthl=HitSign      text=✔")
-	fmt.Println(":sign  define  miss     linehl=MissLine     texthl=MissSign     text=✘")
-	fmt.Println(":sign  define  ignored  linehl=IgnoredLine  texthl=IgnoredSign  text=◌")
+	out, err := os.Create(".cadre/coverage.vim")
+	if err != nil {
+		log.Fatal("Cannot create file", err)
+	}
+	defer out.Close()
+
+	fmt.Fprintf(out, ":hi  HitSign     ctermfg=6      cterm=bold   gui=bold    guifg=Green\n")
+	fmt.Fprintf(out, ":hi  MissSign    ctermfg=Red    cterm=bold   gui=bold    guifg=Red\n")
+	fmt.Fprintf(out, ":hi  IgnoredSign ctermfg=6      cterm=bold   gui=bold    guifg=Grey\n")
+	fmt.Fprintf(out, ":sign  define  hit      linehl=HitLine      texthl=HitSign      text=✔\n")
+	fmt.Fprintf(out, ":sign  define  miss     linehl=MissLine     texthl=MissSign     text=✘\n")
+	fmt.Fprintf(out, ":sign  define  ignored  linehl=IgnoredLine  texthl=IgnoredSign  text=◌\n")
+
 	for f := range files {
 		for l := range files[f] {
-			fmt.Printf(":sign place 1 line=%d name=%s file=%s\n", files[f][l].line, files[f][l].status, files[f][l].filename)
+			fmt.Fprintf(out, ":sign place 1 line=%d name=%s file=%s\n", files[f][l].line, files[f][l].status, files[f][l].filename)
 		}
 	}
 }
@@ -130,22 +137,6 @@ func parseCoverLine(line string) (item Cover, err error) {
 	log.Println(item)
 	return
 }
-
-/*
-	"simplecov results template
-	let s:generatedTime = <%= Time.now.to_i %>
-	let s:coverageResults = {
-	<% results.each_pair do |file, coverage|
-	%>\'<%= file %>': {
-	\  'hits': <%= coverage[:hits].inspect %>,
-	\  'misses': <%= coverage[:misses].inspect%>,
-	\  'ignored': <%= coverage[:ignored].inspect%>
-	\  },
-	<% end%>
-	\}
-	call AddSimplecovResults(expand("<sfile>:p"), s:coverageResults)
-	"end template
-*/
 
 /*
 	:sign place 1 line=37 name=hit file=main.go
