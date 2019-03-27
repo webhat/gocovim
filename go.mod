@@ -1,1 +1,1 @@
-module gocover
+module gocovim

@@ -1,5 +1,5 @@
 if !exists("g:gocovim_command")
-    let g:gocovim_command = "gocover"
+    let g:gocovim_command = "gocovim"
 endif
 
 function! GoCoVim()
