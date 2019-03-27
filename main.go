@@ -114,9 +114,11 @@ func createCoverageFile() {
 	fmt.Fprintf(out, ":sign  define  ignored  linehl=IgnoredLine  texthl=IgnoredSign  text=◌\n")
 
 	for f := range files {
+		fmt.Fprintf(out, "if bufwinnr(\"%s\") > 0\n", f)
 		for l := range files[f] {
 			fmt.Fprintf(out, ":sign place 1 line=%d name=%s file=%s\n", files[f][l].line, files[f][l].status, files[f][l].filename)
 		}
+		fmt.Fprintf(out, "endif\n")
 	}
 }
 
